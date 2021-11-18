@@ -1,0 +1,435 @@
+openapi: 3.0.0
+info:
+  title: eVoucher
+  description: You can obtain JWT token from login API
+  version: "2.5.53"
+servers:
+  # - url: http://20.195.112.136/api
+  #   description: Dev server for testing
+  - url: http://localhost:3001/api
+    description: Local server for testing
+  - url: http://114.198.142.124:6010/api
+    description: Api url of the eVoucher
+paths:
+  /authenticate:
+    post:
+      summary: This API is to be used to determine and validate merchant credentials.
+      security: [] # No security
+      tags:
+        - Security
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+            examples: # Sample object
+              admin:
+                value:
+                  login_id: admin
+                  password: password
+              gamingmerchant:
+                value:
+                  login_id: gamingmerchant1
+                  password: password
+              fintechmerchant:
+                value:
+                  login_id: fintechmerchant1
+                  password: password
+
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Token"
+              example:
+                response_code: "0"
+                response_message: "Success"
+                data: "Bearer 6f9454530b474fae83f20d3396ba9fed"
+  /inquiry:
+    post:
+      summary: As to be able to check the status or the details of the transactions that were sent previously
+      tags:
+        - Transaction
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TransactionInquiry"
+              examples:
+                BUY:
+                  response_code: "0"
+                  response_message: "Success"
+                  data:
+                    transaction_type: "01"
+                    from_merchant:
+                      code: "FINTECH-MERCHANT-01"
+                      name: "Fintech Merchant 01"
+                    to_merchant:
+                      code: "GAMING-MERCHANT-01"
+                      name: "Gaming Merchant 01"
+                    voucher_code: "TK-0500"
+                    amount: 500
+                    sender: "09171111111"
+                    receiver: "09171111111"
+                    recipient: "6112020340000413"
+                    reference_number: "1234567890"
+                    transaction_number: "c3526c8469e5493883e211dfd561a4f2"
+                    transaction_date: "2021-01-07T09:12:21.342Z"
+                    status:
+                      code: "0"
+                      message: "Success"
+                    info: []
+                    coordinator: "09171111111"
+                CASHOUT:
+                  response_code: "0"
+                  response_message: "Success"
+                  data:
+                    transaction_type: "01"
+                    to_merchant:
+                      code: "FINTECH-MERCHANT-01"
+                      name: "Fintech Merchant 01"
+                    from_merchant:
+                      code: "GAMING-MERCHANT-01"
+                      name: "Gaming Merchant 01"
+                    voucher_code: ""
+                    amount: 500
+                    sender: "09171111111"
+                    receiver: "09171111111"
+                    recipient: "6112020340000413"
+                    reference_number: "1234567890"
+                    transaction_number: "c3526c8469e5493883e211dfd561a4f2"
+                    transaction_date: "2021-01-07T09:12:21.342Z"
+                    status:
+                      code: "0"
+                      message: "Success"
+                    info:
+                      - approval_code:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Inquiry"
+            example:
+              reference_number: "1234567890"
+  /transaction_list:
+    post:
+      summary: As to be able to get the list of transactions and its details
+      tags:
+        - Transaction
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TransactionList"
+                example:
+                  response_code: "0"
+                  response_message: "Success"
+                  data:
+                    - transaction_type: "01"
+                      to_merchant:
+                        code: "FINTECH-MERCHANT-01"
+                        name: "Fintech Merchant 01"
+                      from_merchant:
+                        code: "GAMING-MERCHANT-01"
+                        name: "Gaming Merchant 01"
+                      voucher_code: "TK-0500"
+                      amount: 500
+                      sender: "09171111111"
+                      receiver: "09171111111"
+                      recipient: "6112020340000413"
+                      reference_number: "1234567890"
+                      transaction_number: "c3526c8469e5493883e211dfd561a4f2"
+                      transaction_date": "2021-12-20 04:00:00"
+                      status:
+                        code: "0"
+                        message: "Success"
+                      info: []
+                      coordinator: "09171111111"
+                    - transaction_type: "02"
+                      from_merchant:
+                        code: "FINTECH-MERCHANT-01"
+                        name: "Fintech Merchant 01"
+                      to_merchant:
+                        code: "GAMING-MERCHANT-01"
+                        name: "Gaming Merchant 01"
+                      voucher_code: ""
+                      amount: 500
+                      sender: "09171111111"
+                      receiver: "09171111111"
+                      recipient: "6112020340000413"
+                      reference_number: "1234567890"
+                      transaction_number: "c3526c8469e5493883e211dfd561a4f2"
+                      transaction_date": "2021-12-20 04:00:00"
+                      status:
+                        code: "0"
+                        message: "Success"
+                      info:
+                        - approval_code: "xxx-1234567890"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                date_from: "string"
+                date_to: "string"
+            example:
+              date_from: "2021-01-01"
+              date_to: "2021-01-05"
+  /transact:
+    post:
+      summary: As to process the details of the transactions
+      tags:
+        - Transaction
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TransactionNumber"
+              example:
+                response_code: "0"
+                response_message: "Success"
+                data:
+                  transaction_number: c3526c8469e5493883e211dfd561a4f2
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/Transaction"
+            examples:
+              Buy:
+                value:
+                  transaction_type: "01"
+                  merchant_code: "GAMING-MERCHANT-01"
+                  voucher_code: "TK-0500"
+                  amount: 500
+                  sender: "09171111111"
+                  receiver: "09171111111"
+                  recipient: "6112020340000413"
+                  reference_number: "12345678"
+                  info: []
+              Cashout:
+                value:
+                  transaction_type: "02"
+                  merchant_code: "FINTECH-MERCHANT-01"
+                  voucher_code: ""
+                  amount: 500
+                  sender: "09171111111"
+                  receiver: "09171111111"
+                  recipient: "6112020340000413"
+                  reference_number: "12345678"
+                  info:
+                    - approval_code: "100000003"
+
+  /voucher_list:
+    get:
+      summary: As to be able to check the details of the transactions that were sent previously, this API may be used.
+      tags:
+        - Voucher
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/VoucherList"
+              example:
+                response_code: "0"
+                response_message: "Success"
+                data:
+                  - merchant_code: "MERCH_02"
+                    merchant_data:
+                      - category: "Tickets"
+                        vouchers:
+                          - code: "TK-0500"
+                            amount: 500
+                          - code: "TK-1000"
+                            amount: 1000
+                          - code: "TK-1500"
+                            amount: 1500
+
+# JWT security
+security:
+  - bearerAuth: []
+
+# Components
+components:
+  # Security
+  securitySchemes:
+    bearerAuth: # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT # optional, arbitrary value for documentation purposes
+
+  # Data Model
+  schemas:
+    Response:
+      properties:
+        response_code:
+          type: "string"
+        response_message:
+          type: "string"
+        data:
+          type: "object"
+    Token:
+      allOf:
+        - $ref: "#/components/schemas/Response"
+        - type: "object"
+          properties:
+            data:
+              type: "string"
+    TransactionNumber:
+      allOf:
+        - $ref: "#/components/schemas/Response"
+        - type: "object"
+          properties:
+            data:
+              type: "object"
+              properties:
+                transaction_number:
+                  type: "string"
+    TransactionDetails:
+      properties:
+        transaction_type:
+          type: "string"
+        from_merchant:
+          type: "object"
+          properties:
+            code:
+              type: "string"
+            name:
+              type: "string"
+        to_merchant:
+          type: "object"
+          properties:
+            code:
+              type: "string"
+            name:
+              type: "string"
+        voucher_code:
+          type: "string"
+        amount:
+          type: "number"
+        sender:
+          type: "string"
+        recipient:
+          type: "string"
+        reference_number:
+          type: "string"
+        transaction_number:
+          type: "string"
+        transaction_date":
+          type: "string"
+        status:
+          type: "object"
+          properties:
+            code:
+              type: "string"
+            message:
+              type: "string"
+        info:
+          type: "array"
+          items:
+            type: "object"
+            properties:
+              approval_code:
+                type: "string"
+    TransactionInquiry:
+      allOf:
+        - $ref: "#/components/schemas/Response"
+        - type: "object"
+          properties:
+            data:
+              $ref: "#/components/schemas/TransactionDetails"
+    TransactionList:
+      allOf:
+        - $ref: "#/components/schemas/Response"
+        - type: "object"
+          properties:
+            data:
+              type: array
+              items:
+                $ref: "#/components/schemas/TransactionDetails"
+
+    User:
+      properties:
+        login_id:
+          type: "string"
+        password:
+          type: "string"
+      required:
+        - login_id
+        - password
+    Inquiry:
+      properties:
+        reference_number:
+          type: "string"
+      required:
+        - reference_number
+    Transaction:
+      properties:
+        transaction_type:
+          type: "string"
+        merchant_code:
+          type: "string"
+        voucher_code:
+          type: "string"
+        amount:
+          type: "number"
+        sender:
+          type: "string"
+        receiver:
+          type: "string"
+        recipient:
+          type: "string"
+        reference_number:
+          type: "string"
+        info:
+          type: "array"
+          items:
+            type: "object"
+            properties:
+              approval_code:
+                type: "string"
+    VoucherList:
+      allOf:
+        - $ref: "#/components/schemas/Response"
+        - type: "object"
+          properties:
+            data:
+              type: "object"
+              properties:
+                merchant_code:
+                  type: "string"
+                merchant_data:
+                  type: "array"
+                  items:
+                    type: "object"
+                    properties:
+                      category:
+                        type: "string"
+                      vouchers:
+                        type: "array"
+                        items:
+                          type: "object"
+                          properties:
+                            code:
+                              type: "string"
+                            amount:
+                              type: "number"

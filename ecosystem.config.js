@@ -1,6 +1,6 @@
 module.exports = {
   apps: [{
-    name: 'evoucher-backend-jpaypitmaster',
+    name: 'bayanedge-backoffice-backend',
     script: 'index.js',
     watch: true,
     watch_delay: 4000,

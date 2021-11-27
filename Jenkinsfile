@@ -12,7 +12,7 @@ pipeline {
         }
         stage("Move File") {
             steps {
-                sh "cp -rf ${WORKSPACE}/* /opt/jpay/jpay-pitmaster-backend"
+                sh "cp -rf ${WORKSPACE}/* /opt/bayanedge/bayanedge-backoffice-backend"
             }
         }
     }

@@ -24,7 +24,7 @@ const enterpriseController = {
         try {
 
 
-            res.send(new CommonMessage({ data: await enterpriseService.getAll() }))
+            res.send(new CommonMessage({ data: await enterpriseService.getAll(req.query) }))
         }
         catch (err) {
             const safeErr = ErrorManager.getSafeError(err)

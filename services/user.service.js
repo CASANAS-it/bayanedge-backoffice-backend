@@ -39,20 +39,6 @@ const userService = {
             expiresIn: 10800 // 3 hours
         })
         return token
-    },
-    addAccount: async (props) => {
-        const { email } = props
-
-        if (!email) {
-            throw new Errors.UNKNOWN()
-        }
-
-        await userModel.addUser(props)
-
-    },
-    getAll: async () => {
-        return await userModel.getAll()
-
     }
 
 }

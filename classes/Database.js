@@ -7,6 +7,7 @@ import properties from '../properties.js'
 import apilogModel from '../models/apilog.model'
 import userModel from '../models/user.model'
 import enterpriseModel from '../models/enterprise.model'
+import accountModel from '../models/account.model'
 
 // Start Import Models
 
@@ -56,7 +57,9 @@ class Database {
     await apilogModel.init()
     await userModel.init()
     await enterpriseModel.init()
+    await accountModel.init()
   }
+  
 }
 
 export default new Database()

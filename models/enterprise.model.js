@@ -59,8 +59,15 @@ const customModel = {
         })
         await user.save()
     },
-    getAll: async () => {
-        return await customModel.getModel().find({}, { _id: 0, __v: 0 }).lean()
+    getAll: async (props) => {
+        const query = {}
+        
+        if(props.email) {
+            query.email =  {
+               $regex: props.email
+            }
+        }
+        return await customModel.getModel().find(query, { _id: 0, __v: 0 }).lean()
     },
 
 }

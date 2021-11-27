@@ -6,14 +6,14 @@ const enterpriseService = {
         const { email } = props
 
         if (!email) {
-            throw new Errors.UNKNOWN()
+            throw new Errors.EMAIL_IS_REQUIRED()
         }
 
         await enterpriseModel.addUser(props)
 
     },
-    getAll: async () => {
-        return await enterpriseModel.getAll()
+    getAll: async (props) => {
+        return await enterpriseModel.getAll({email: props.email})
 
     }
 

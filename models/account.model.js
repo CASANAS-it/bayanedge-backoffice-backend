@@ -14,9 +14,6 @@ const customModel = {
             email: {
                 type: 'String'
             },
-            password: {
-                type: 'String'
-            },
             createdDate: {
                 type: 'String'
             },
@@ -28,7 +25,7 @@ const customModel = {
             }
         })
 
-        customModel.setModel(db.connection.model('backoffice_user', customerSchema))
+        customModel.setModel(db.connection.model('account', customerSchema))
 
         return customerSchema
     },
@@ -46,22 +43,25 @@ const customModel = {
     getModel: () => {
         return customModel.model
     },
-    getUser: async (props) => {
-        const { email, password } = props
-        return await customModel.getModel().findOne({ email, password }).lean()
-    },
-    getUserByEmail: async (props) => {
-        const { email, } = props
-        return await customModel.getModel().findOne({ email, }).lean()
-    },
-    addUser: async (props) => {
+    addAccount: async (props) => {
         const user = new customModel.model({
             ...props,
             createdDate: new Date(),
             modifiedDate: new Date()
         })
         await user.save()
-    }
+    },
+    getAll: async (props) => {
+        const query = {}
+        
+        if(props.email) {
+            query.email =  {
+               $regex: props.email
+            }
+        }
+        return await customModel.getModel().find(query, { _id: 0, __v: 0, password: 0 }).lean()
+
+    },
 
 }
 

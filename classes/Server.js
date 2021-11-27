@@ -27,6 +27,7 @@ import Database from './Database.js'
 import { middleware } from 'express-http-context'
 import userController from '../controllers/user.controller'
 import enterpriseController from '../controllers/enterprise.controller'
+import accountController from '../controllers/account.controller'
 // End Import Controllers
 
 class Server {
@@ -104,6 +105,7 @@ class Server {
     SecurityController.init(router)
     userController.init(router)
     enterpriseController.init(router)
+    accountController.init(router)
   }
 }
 

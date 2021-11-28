@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
 import Database from '../classes/Database'
 import moment from 'moment'
+import mongoosePaginate from 'mongoose-paginate'
 
 const customModel = {
 
@@ -25,6 +26,7 @@ const customModel = {
             }
         })
 
+        customerSchema.plugin(mongoosePaginate)
         customModel.setModel(db.connection.model('account', customerSchema))
 
         return customerSchema
@@ -61,6 +63,21 @@ const customModel = {
         }
         return await customModel.getModel().find(query, { _id: 0, __v: 0, password: 0 }).lean()
 
+    },
+    get: async (id) => {
+        return await customModel.getModel().find({_id: id}).lean()
+
+    },
+    getPaginatedItems: async (limit, offset, email) => {
+
+        const query = {}
+        
+        if(email) {
+            query.email =  {
+               $regex: email
+            }
+        }
+      return await customModel.getModel().paginate(query, { offset: offset, limit: limit })
     },
 
 }

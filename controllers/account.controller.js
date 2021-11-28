@@ -6,7 +6,8 @@ import accountService from "../services/account.service"
 const accountController = {
   init: router => {
     router.post(properties.api + '/account/add', accountController.addAccount)
-    router.get(properties.api + '/account', accountController.getAll)
+    router.post(properties.api + '/account', accountController.getAll)
+    router.post(properties.api + '/account/get', accountController.get)
   },
   addAccount: async (req, res) => {
     try {
@@ -24,7 +25,19 @@ const accountController = {
     try {
 
 
-      res.send(new CommonMessage({ data: await accountService.getAll(req.query) }))
+      res.send(new CommonMessage({ data: await accountService.getAll(req.body) }))
+    }
+    catch (err) {
+      const safeErr = ErrorManager.getSafeError(err)
+      res.status(safeErr.status).json(safeErr.body)
+    }
+  },
+
+  get: async (req, res) => {
+    try {
+
+
+      res.send(new CommonMessage({ data: await accountService.get(req.body) }))
     }
     catch (err) {
       const safeErr = ErrorManager.getSafeError(err)

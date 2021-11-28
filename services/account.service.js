@@ -1,5 +1,6 @@
 import Errors from "../classes/Errors"
 import accountModel from "../models/account.model"
+import { getPagination, getPagingData } from "../utils/CommonUtil"
 
 const accountService = {
     addAccount: async (props) => {
@@ -13,9 +14,26 @@ const accountService = {
 
     },
     getAll: async (props) => {
-        return await accountModel.getAll({email: props.email})
+        const {pageIndex, pageSize, email} = props        
+
+        const { limit, offset } = getPagination(pageIndex, pageSize);
+
+        const paginatedData = await accountModel.getPaginatedItems(limit, offset, email)
+        // return await accountModel.getAll({email: props.email})
+        return getPagingData(paginatedData, pageIndex, limit)
+
+    },
+    get: async (props) => {
+        const {pageNo, pageSize, email} = props        
+
+        const { limit, offset } = getPagination(pageNo, pageSize);
+
+        const paginatedData = await accountModel.getPaginatedItems(limit, offset, email)
+        // return await accountModel.getAll({email: props.email})
+        return getPagingData(paginatedData, pageNo, limit)
 
     }
+    
 
 }
 

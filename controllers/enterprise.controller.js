@@ -5,8 +5,13 @@ import enterpriseService from "../services/enterprise.service";
 const enterpriseController = {
     init: router => {
         const baseUrl = `${properties.api}/enterprise`;
+        // router.post(baseUrl + '/add', enterpriseController.addEnterprise)
+        // router.get(baseUrl, enterpriseController.getAll)
+
+
         router.post(baseUrl + '/add', enterpriseController.addEnterprise)
-        router.get(baseUrl, enterpriseController.getAll)
+        router.post(baseUrl + '', enterpriseController.getAll)
+        router.post(baseUrl + '/get', enterpriseController.get)
     },
     addEnterprise: async (req, res) => {
         try {
@@ -21,6 +26,18 @@ const enterpriseController = {
     },
 
     getAll: async (req, res) => {
+        try {
+
+
+            res.send(new CommonMessage({ data: await enterpriseService.getAll(req.body) }))
+        }
+        catch (err) {
+            const safeErr = ErrorManager.getSafeError(err)
+            res.status(safeErr.status).json(safeErr.body)
+        }
+    },
+
+    get: async (req, res) => {
         try {
 
 

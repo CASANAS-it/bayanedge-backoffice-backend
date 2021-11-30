@@ -10,11 +10,16 @@ const accountService = {
             throw new Errors.EMAIL_IS_REQUIRED()
         }
 
-        await accountModel.addAccount(props)
+        if (props._id) {
+            await accountModel.updateAccount(props)
+        } else {
+            delete props._id
+            await accountModel.addAccount(props)
+        }
 
     },
     getAll: async (props) => {
-        const {pageIndex, pageSize, email} = props        
+        const { pageIndex, pageSize, email } = props
 
         const { limit, offset } = getPagination(pageIndex, pageSize);
 
@@ -24,16 +29,14 @@ const accountService = {
 
     },
     get: async (props) => {
-        const {pageNo, pageSize, email} = props        
+        return await accountModel.get(props)
+    },
+    deleteAccount: async (props) => {
 
-        const { limit, offset } = getPagination(pageNo, pageSize);
-
-        const paginatedData = await accountModel.getPaginatedItems(limit, offset, email)
-        // return await accountModel.getAll({email: props.email})
-        return getPagingData(paginatedData, pageNo, limit)
+        await accountModel.deleteAccount(props)
 
     }
-    
+
 
 }
 

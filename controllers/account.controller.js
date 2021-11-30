@@ -6,6 +6,7 @@ import accountService from "../services/account.service"
 const accountController = {
   init: router => {
     router.post(properties.api + '/account/add', accountController.addAccount)
+    router.post(properties.api + '/account/delete', accountController.deleteAccount)
     router.post(properties.api + '/account', accountController.getAll)
     router.post(properties.api + '/account/get', accountController.get)
   },
@@ -43,7 +44,18 @@ const accountController = {
       const safeErr = ErrorManager.getSafeError(err)
       res.status(safeErr.status).json(safeErr.body)
     }
-  }
+  },
+  deleteAccount: async (req, res) => {
+    try {
+
+      await accountService.deleteAccount(req.body)
+      res.send(new CommonMessage({}))
+    }
+    catch (err) {
+      const safeErr = ErrorManager.getSafeError(err)
+      res.status(safeErr.status).json(safeErr.body)
+    }
+  },
 }
 
 

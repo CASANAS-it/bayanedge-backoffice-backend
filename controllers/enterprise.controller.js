@@ -10,6 +10,7 @@ const enterpriseController = {
 
 
         router.post(baseUrl + '/add', enterpriseController.addEnterprise)
+        router.post(baseUrl + '/delete', enterpriseController.deleteEnterprise)
         router.post(baseUrl + '', enterpriseController.getAll)
         router.post(baseUrl + '/get', enterpriseController.get)
     },
@@ -41,7 +42,18 @@ const enterpriseController = {
         try {
 
 
-            res.send(new CommonMessage({ data: await enterpriseService.getAll(req.query) }))
+            res.send(new CommonMessage({ data: await enterpriseService.get(req.body) }))
+        }
+        catch (err) {
+            const safeErr = ErrorManager.getSafeError(err)
+            res.status(safeErr.status).json(safeErr.body)
+        }
+    },
+
+    deleteEnterprise: async (req, res) => {
+        try {
+            await enterpriseService.deleteEnterprise(req.body)
+            res.send(new CommonMessage({}))
         }
         catch (err) {
             const safeErr = ErrorManager.getSafeError(err)

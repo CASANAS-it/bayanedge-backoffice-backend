@@ -10,13 +10,18 @@ const enterpriseService = {
             throw new Errors.EMAIL_IS_REQUIRED()
         }
 
-        await enterpriseModel.addUser(props)
+        if (props._id) {
+            await enterpriseModel.updateEnterprise(props)
+        } else {
+            delete props._id
+            await enterpriseModel.addUser(props)
+        }
 
     },
     getAll: async (props) => {
 
-        
-        const {pageIndex, pageSize, email} = props        
+
+        const { pageIndex, pageSize, email } = props
 
         const { limit, offset } = getPagination(pageIndex, pageSize);
 
@@ -27,7 +32,18 @@ const enterpriseService = {
 
         // return await enterpriseModel.getAll({email: props.email})
 
-    }
+    },
+    get: async (props) => {
+        return await enterpriseModel.get(props)
+
+
+        // return await enterpriseModel.getAll({email: props.email})
+
+    },
+    deleteEnterprise: async (props) => {
+        await enterpriseModel.deleteEnterprise(props)
+
+    },
 
 }
 

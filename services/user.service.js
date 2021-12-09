@@ -39,7 +39,20 @@ const userService = {
             expiresIn: 10800 // 3 hours
         })
         return token
-    }
+    },
+    validatePassword: async (props) => {
+        const { email, password } = props
+
+        if (!email || !password) {
+            throw new Errors.UNKNOWN()
+        }
+
+        const user = await userModel.getUser({ email, password })
+
+        if (!user) {
+            throw new Errors.INVALID_LOGIN()
+        }
+    },
 
 }
 

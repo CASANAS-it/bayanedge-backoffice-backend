@@ -7,9 +7,25 @@ const userController = {
   init: router => {
     router.post(properties.api + '/user/login', userController.login)
     router.post(properties.api + '/user/forgot-password', userController.forgotPassword)
+    router.post(properties.api + '/user/validate-password', userController.login)
   },
 
   login: async (req, res) => {
+    try {
+
+      res.send(
+        new CommonMessage({
+          data: await userService.login(req.body)
+        })
+      )
+    }
+    catch (err) {
+      const safeErr = ErrorManager.getSafeError(err)
+      res.status(safeErr.status).json(safeErr.body)
+    }
+  },
+
+  validatePassword: async (req, res) => {
     try {
 
       res.send(

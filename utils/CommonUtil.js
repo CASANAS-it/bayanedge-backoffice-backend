@@ -15,9 +15,16 @@ function getPagingData(data, page, limit) {
   return { totalItems, rows, totalPages, currentPage };
 }
 
+function padZeroes(num, size = 6) {
+  num = num.toString();
+  while (num.length < size) num = "0" + num;
+  return num;
+}
+
 
 
 export {
   getPagination,
-  getPagingData
+  getPagingData,
+  padZeroes
 }

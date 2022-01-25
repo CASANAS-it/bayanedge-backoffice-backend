@@ -4,12 +4,12 @@ const CustomerType = Object.freeze({
   CUSTOMER: { code: 'CUST', name: 'Customer' }
 })
 
-const TransactionType = Object.freeze({
-  BUY: { code: '01', name: 'Buy' },
-  CASHOUT: { code: '02', name: 'Cashout' },
-  LOGIN: { code: '03', name: 'Login' },
-  GET_REFERENCE_CODE: { code: '04', name: 'Request Reference Code' }
-})
+// const TransactionType = Object.freeze({
+//   BUY: { code: '01', name: 'Buy' },
+//   CASHOUT: { code: '02', name: 'Cashout' },
+//   LOGIN: { code: '03', name: 'Login' },
+//   GET_REFERENCE_CODE: { code: '04', name: 'Request Reference Code' }
+// })
 
 const MerchantType = Object.freeze({
   FINTECH: { code: 'FINTECH', name: 'Fintech' },
@@ -46,6 +46,26 @@ const TRANSACTION_FEE_TYPE = Object.freeze({
   NMTF: 'NMTF'
 })
 
+const TransactionType = Object.freeze({
+  CASH: 'Cash',
+  ACCOUNT: 'Account',
+})
+
+const FlowType = Object.freeze({
+  INFLOW: 'Inflow',
+  OUTFLOW: 'Outflow',
+})
+
+const TransType = Object.freeze({
+  SALES : "Sales",
+  ORDER : "Order",
+  LEDGER : "Ledger",
+  ACCOUNTS_PAYABLE : "Accounts Payable",
+  ACCOUNTS_RECEIVABLE : "Accounts Receivable",
+  MICROSAVINGS : "Microsavings",
+  LOANS_PROCEED : "Loans Proceed"
+})
+
 export {
   CustomerType,
   TransactionType,
@@ -54,5 +74,7 @@ export {
   SETTINGS,
   ACCESS_LEVELS,
   PITMASTER_CUSTOMER_STATUS,
-  TRANSACTION_FEE_TYPE
+  TRANSACTION_FEE_TYPE,
+  FlowType,
+  TransType
 }

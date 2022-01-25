@@ -8,6 +8,9 @@ import apilogModel from '../models/apilog.model'
 import userModel from '../models/user.model'
 import enterpriseModel from '../models/enterprise.model'
 import accountModel from '../models/account.model'
+import customerModel from '../models/customer.model'
+import cashjournalModel from '../models/cashjournal.model'
+import inventoryModel from '../models/inventory.model'
 
 // Start Import Models
 
@@ -58,6 +61,9 @@ class Database {
     await userModel.init()
     await enterpriseModel.init()
     await accountModel.init()
+    await customerModel.init()
+    await cashjournalModel.init()
+    await inventoryModel.init()
   }
   
 }

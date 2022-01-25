@@ -28,6 +28,9 @@ import { middleware } from 'express-http-context'
 import userController from '../controllers/user.controller'
 import enterpriseController from '../controllers/enterprise.controller'
 import accountController from '../controllers/account.controller'
+import cashinController from '../controllers/cashinflow.controller'
+import cashjournalController from '../controllers/cashjournal.controller'
+import cashoutController from '../controllers/cashoutflow.controller'
 // End Import Controllers
 
 class Server {
@@ -106,6 +109,9 @@ class Server {
     userController.init(router)
     enterpriseController.init(router)
     accountController.init(router)
+    cashinController.init(router)
+    cashjournalController.init(router)
+    cashoutController.init(router)
   }
 }
 

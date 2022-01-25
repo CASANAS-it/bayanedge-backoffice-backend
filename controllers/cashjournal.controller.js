@@ -54,7 +54,7 @@ const cashjournalController = {
             const { id } = req.body;
             res.send(
                 new CommonMessage({
-                    data: await cashJournalService.getSummary()
+                    data: await cashJournalService.getSummary(req.body)
                 })
             )
         } catch (err) {

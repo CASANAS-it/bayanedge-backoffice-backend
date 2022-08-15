@@ -31,6 +31,20 @@ import accountController from '../controllers/account.controller'
 import cashinController from '../controllers/cashinflow.controller'
 import cashjournalController from '../controllers/cashjournal.controller'
 import cashoutController from '../controllers/cashoutflow.controller'
+import SalesController from '../controllers/SalesController'
+import LedgerController from '../controllers/LedgerController'
+import InventoryController from '../controllers/InventoryController'
+import CustomerController from '../controllers/CustomerController'
+import VendorController from '../controllers/VendorController'
+import LookupController from '../controllers/LookupController'
+import AccountPayableController from '../controllers/AccountPayableController'
+import AccountReceivableController from '../controllers/AccountReceivableController'
+import LoansPayableController from '../controllers/LoansPayableController'
+import LoansPayableItemController from '../controllers/LoansPayableItemController'
+import ReportsController from '../controllers/ReportsController'
+import BeginningBalanceController from '../controllers/BeginningBalanceController'
+import LoansProceedController from '../controllers/LoansProceedController'
+import SubscriptionController from '../controllers/SubscriptionController'
 // End Import Controllers
 
 class Server {
@@ -112,6 +126,20 @@ class Server {
     cashinController.init(router)
     cashjournalController.init(router)
     cashoutController.init(router)
+    SalesController.init(router)
+    InventoryController.init(router)
+    LedgerController.init(router)
+    CustomerController.init(router)
+    VendorController.init(router)
+    LookupController.init(router)
+    AccountPayableController.init(router)
+    AccountReceivableController.init(router)
+    LoansPayableController.init(router)
+    LoansPayableItemController.init(router)
+    ReportsController.init(router)
+    BeginningBalanceController.init(router)
+    LoansProceedController.init(router)
+    SubscriptionController.init(router)
   }
 }
 

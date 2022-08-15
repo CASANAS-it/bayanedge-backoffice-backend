@@ -12,7 +12,6 @@ const userService = {
         }
 
         const user = await userModel.getUser({ email, password })
-
         if (!user) {
             throw new Errors.INVALID_LOGIN()
         }
@@ -41,13 +40,13 @@ const userService = {
         return token
     },
     validatePassword: async (props) => {
-        const { email, password } = props
-
-        if (!email || !password) {
-            throw new Errors.UNKNOWN()
+        const { currentLogin, password } = props
+        console.log(currentLogin,'-------')
+        if (!currentLogin.email || !password) {
+            throw new Errors.NO_RECORDS_FOUND()
         }
 
-        const user = await userModel.getUser({ email, password })
+        const user = await userModel.getUser({ email : currentLogin.email, password })
 
         if (!user) {
             throw new Errors.INVALID_LOGIN()

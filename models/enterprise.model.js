@@ -1,7 +1,8 @@
-import mongoose from 'mongoose'
+import mongoose, { Query } from 'mongoose'
 import Database from '../classes/Database'
 import moment from 'moment'
 import mongoosePaginate from 'mongoose-paginate'
+import { generateId } from '../utils/Crypto'
 
 const customModel = {
 
@@ -12,21 +13,96 @@ const customModel = {
           * Customer
           */
         const customerSchema = new mongoose.Schema({
+            id: {
+                type: 'String'
+            },
+            client_id: {
+                type: 'String'
+            },
+            name: {
+                type: 'String'
+            },
+            owner: {
+                type: 'String'
+            },
+            type_of_ownership: {
+                type: "String"
+            },
+            industry: {
+                type: 'String'
+            },
+            main_product: {
+                type: 'String'
+            },
+            home_address: {
+                type: 'String'
+            },
+            business_address: {
+                type: 'String'
+            },
+            landline: {
+                type: 'String'
+            },
+            mobile_number: {
+                type: 'String'
+            },
             email: {
                 type: 'String'
             },
-            createdDate: {
+            website: {
                 type: 'String'
             },
-            modifiedDate: {
+            year_established: {
                 type: 'String'
             },
-            role: {
+            years_of_existence: {
+                type: 'String'
+            },
+            registration: {
+                type: 'String'
+            },
+            registration_date: {
+                type: 'String'
+            },
+            tin: {
+                type: 'String'
+            },
+            sss: {
+                type: 'String'
+            },
+            phic_no: {
+                type: 'String'
+            },
+            salaried_workers: {
+                type: 'String'
+            },
+            membership_date: {
+                type: 'String'
+            },
+            edge_officer: {
+                type: 'String'
+            },
+            team_leader: {
+                type: 'String'
+            },
+            branch_name: {
                 type: 'String'
             },
             is_active: {
-                type: 'boolean'
-            }
+                type: 'Boolean'
+            },
+            created_by: {
+                type: 'String'
+            },
+            created_date: {
+                type: 'Date'
+            },
+            modified_by: {
+                type: 'String'
+            },
+            modified_date: {
+                type: 'Date'
+            },
         })
 
         customerSchema.plugin(mongoosePaginate)
@@ -76,12 +152,13 @@ const customModel = {
         return await customModel.getModel().find(query, { __v: 0 }).lean()
     },
     get: async (props) => {
-        return await customModel.getModel().findOne({ _id: props.id, }).lean()
+        return await customModel.getModel().findOne({ _id: props.id }).lean()
     },
-    getPaginatedItems: async (limit, offset, email) => {
+    getPaginatedItems: async (limit, offset, email,search) => {
 
         const query = {
-            is_active: true
+            is_active: true,
+            name: { "$exists": true, "$ne": "" }
         }
 
         if (email) {
@@ -89,7 +166,27 @@ const customModel = {
                 $regex: email
             }
         }
-        return await customModel.getModel().paginate(query, { offset, limit })
+        
+        if (search) {
+            query.name = {
+                $regex: search,$options: 'i'
+            }
+        }
+        
+        var options = {
+            populate: 'parent',
+            lean: true,
+            offset: offset, limit: limit, sort: { name: 1 }
+        }
+        return await customModel.getModel().paginate(query, options)
+
+    },
+    getAll: async () => {
+        const customer = await customModel.model
+            .find({
+            }, [], { sort: { name: 1 } })
+            .lean()
+        return customer
     },
     deleteEnterprise: async (props) => {
         await customModel.model.findOneAndUpdate({ _id: props._id }, {
@@ -104,6 +201,21 @@ const customModel = {
         })
     },
 
+    createEnterprise: async (params) => {
+        const id = generateId()
+        const customer = new customModel.model({
+          id: id,
+          name : params.name,
+          email : params.email,
+          is_active : true,
+          created_by: params.admin_id,
+          created_date: new Date(),
+          modified_by: params.admin_id,
+          modified_date: new Date(),
+        })
+        return await customer.save()
+    
+      }
 
 }
 

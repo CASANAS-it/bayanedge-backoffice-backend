@@ -1,22 +1,47 @@
 import Errors from '../classes/Errors'
-import { FlowType, TransType } from '../classes/Constants'
 import customerModel from '../models/customer.model'
-import cashjournalModel from '../models/cashjournal.model'
+import cashJournalModel from '../models/cashjournal.model'
+import { FlowType, TransType } from '../classes/Constants'
+import BeginningBalanceModel from '../models/BeginningBalanceModel'
 
 const cashJournalService = {
-  getAll: async (limit, offset, client_id, type) => {
-    return await cashjournalModel.getPaginatedItems(limit, offset, client_id, type)
+  getAll: async (limit, offset, client_id, type, search, type_id, filter = null) => {
+    return await cashJournalModel.getPaginatedItems(limit, offset, client_id, type, search, type_id, filter)
+  },
+
+  getByRef: async (client_id, type, search, type_id, filter = null) => {
+    return await cashJournalModel.getAllFiltered(client_id, type, search, type_id, filter)
+  },
+  getAllTotal: async (client_id, type, search, type_id, filter = null) => {
+    return await cashJournalModel.getAllFiltered(client_id, type, search, type_id, filter)
+  },
+  getAllByRefId: async (limit, offset, client_id, search, ref_id, type_id) => {
+    return await cashJournalModel.getPaginatedItemsByRefId(limit, offset, client_id, search, ref_id, type_id)
   },
   getById: async (id) => {
-    var sales = await cashjournalModel.getById(id)
+    var sales = await cashJournalModel.getById(id)
     if (!sales) {
       throw new Errors.NO_RECORDS_FOUND()
     }
     return sales
   },
+  getSummaryByType: async (client_id, type_id) => {
+    var beginningBalance = await BeginningBalanceModel.getByClientIdTypeId(client_id, type_id)
+    var total = beginningBalance ? parseFloat(beginningBalance.details.beginning_amount) : 0;
+
+    var cj = await cashJournalModel.getAllByClientIdTypeId(client_id, type_id)
+    cj.forEach(element => {
+      total += parseFloat(element.total)
+    });
+    return total
+  },
   getSummary: async (params) => {
-    var cj = await cashjournalModel.getAllByClientId(params.client_id)
-    var total = 0;
+    var cj = await cashJournalModel.getAllByClientId(params.client_id)
+    var begBalance = await BeginningBalanceModel.getAllByClientId(params.client_id)
+    var cashOnHandBeg = begBalance.find(x => x.type_id == TransType.CASH_ON_HAND)
+    cashOnHandBeg = cashOnHandBeg ? parseFloat(cashOnHandBeg.total) : 0;
+
+    var total = cashOnHandBeg;
     var inflowTotal = 0;
     var outflowTotal = 0;
     cj.forEach(element => {
@@ -25,7 +50,7 @@ const cashJournalService = {
       else
         outflowTotal += element.total
     });
-    total = inflowTotal - outflowTotal;
+    total += inflowTotal - outflowTotal;
     var result = {
       total: total,
       inflowTotal: inflowTotal,
@@ -40,26 +65,28 @@ const cashJournalService = {
     }
 
     // revert quantity for inventory
-    var oldSales = await cashjournalModel.getById(params.sales_id);
-    var revertInventory = await inventoryModel.subtractQuantity({ admin_id: params.admin_id, item_id: oldSales.item_id, quantity: oldSales.quantity })
+    // var oldSales = await cashJournalModel.getById(params.sales_id);
+    // var revertInventory = await InventoryModel.subtractQuantity({ admin_id: params.admin_id, item_id: oldSales.item_id, quantity: oldSales.quantity })
     // -----------------------------
-    var sales = await cashjournalModel.update(params)
-    var inventor = await inventoryModel.addQuantity({ admin_id: params.admin_id, item_id: params.item_id, quantity: params.quantity })
+    var sales = await cashJournalModel.update(params)
+    // var inventor = await InventoryModel.addQuantity({ admin_id: params.admin_id, item_id: params.item_id, quantity: params.quantity })
     return sales
   },
   delete: async (params) => {
-    return await cashjournalModel.delete(params)
+    return await cashJournalModel.delete(params)
   },
   create: async (params) => {
     if (!params.customer_id) {
-      var customer = await CustomerModel.create(params)
+      var customer = await customerModel.create(params)
       params.customer_id = customer.customer_id
     }
-    var sales = await cashjournalModel.create(params)
-    var inventor = await inventoryModel.addQuantity({ admin_id: params.admin_id, item_id: params.item_id, quantity: params.quantity })
+    var sales = await cashJournalModel.create(params)
+    // var inventor = await InventoryModel.addQuantity({ admin_id: params.admin_id, item_id: params.item_id, quantity: params.quantity })
 
     return sales
   }
 }
 
-export default cashJournalService
+export {
+  cashJournalService
+}

@@ -27,6 +27,9 @@ const customModel = {
       unit_of_measurement: {
         type: 'String'
       },
+      beginning_quantity: {
+        type: 'Number'
+      },
       quantity: {
         type: 'Number'
       },
@@ -68,6 +71,7 @@ const customModel = {
     const items = await customModel.model
       .find({
         client_id: id,
+        is_active : true
       })
       .lean()
     return items
@@ -76,6 +80,7 @@ const customModel = {
     const items = await customModel.model
       .findOne({
         client_id: id,
+        is_active : true
       }).lean()
     return items
   },
@@ -97,7 +102,8 @@ const customModel = {
       unit_cost: parseFloat(params.unit_cost),
       unit_selling_price: parseFloat(params.unit_selling_price),
       unit_of_measurement: params.unit_of_measurement,
-      quantity: params.quantity,
+      // quantity: params.quantity,
+      beginning_quantity : params.beginning_quantity,
       modified_by: params.admin_id,
       modified_date: new Date(),
     })
@@ -105,7 +111,6 @@ const customModel = {
   },
 
   addQuantity: async (params) => {
-    console.log(params,'addQuantity')
     const user = await customModel.model.findOneAndUpdate({ item_id: params.item_id }, {
       $inc: { quantity: params.quantity },
       modified_by: params.admin_id,
@@ -140,7 +145,8 @@ const customModel = {
       unit_cost: parseFloat(params.unit_cost),
       unit_selling_price: parseFloat(params.unit_selling_price),
       unit_of_measurement: params.unit_of_measurement,
-      quantity: params.quantity,
+      quantity: params.beginning_quantity,
+      beginning_quantity : params.beginning_quantity,
       is_active: true,
       created_by: params.admin_id,
       created_date: new Date(),

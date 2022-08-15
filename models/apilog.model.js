@@ -6,10 +6,6 @@ const customModel = {
 
   init() {
     const db = Database.getConnection()
-
-    /**
-      * Customer
-      */
     const customerSchema = new mongoose.Schema({
       api_log_id: {
         type: 'String'

@@ -8,7 +8,7 @@ import properties from '../properties'
 // Errors
 import ErrorManager from '../classes/ErrorManager'
 import Errors from '../classes/Errors'
-import AccessModel from '../models/AccessModel'
+// import AccessModel from '../models/AccessModel'
 
 /**
  * Middleware JWT
@@ -33,21 +33,24 @@ export const authorize = (accessLevel) => {
         let decodedUser = null
         try {
           decodedUser = jsonwebtoken.verify(token, properties.tokenSecret)
+          req.body.admin_id = decodedUser.id
+          req.body.currentLogin = decodedUser
+          // req.body.client_id = decodedUser.client_id
         } catch (err) {
           // Token not valid
           const safeErr = ErrorManager.getSafeError(new Errors.JWT_INVALID())
-          return res.status(safeErr.status).json(safeErr.body)
+          return res.status(401).json(safeErr.body)
         }
 
-        const hasAccess = await AccessModel.getUserByAccessLevel({ accessLevel, loginId: decodedUser.login_id })
+        // const hasAccess = await AccessModel.getUserByAccessLevel({ accessLevel, loginId: decodedUser.login_id })
 
-        if (hasAccess) {
-          req.user = decodedUser
-          next()
-        } else {
-          const safeErr = ErrorManager.getSafeError(new Errors.UNAUTHORIZED())
-          res.status(safeErr.status).json(safeErr.body)
-        }
+        // if (hasAccess) {
+        //   req.user = decodedUser
+        next()
+        // } else {
+        //   const safeErr = ErrorManager.getSafeError(new Errors.UNAUTHORIZED())
+        //   res.status(safeErr.status).json(safeErr.body)
+        // }
       }
     }
   ]

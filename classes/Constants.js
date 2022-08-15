@@ -11,6 +11,11 @@ const CustomerType = Object.freeze({
 //   GET_REFERENCE_CODE: { code: '04', name: 'Request Reference Code' }
 // })
 
+const Config = Object.freeze({
+  PAYMENT_TERMS : 30, // in days
+  SERVICE_FEE_PERCENT : 0.02
+})
+
 const MerchantType = Object.freeze({
   FINTECH: { code: 'FINTECH', name: 'Fintech' },
   LEISURE: { code: 'LEISURE', name: 'Leisure' }
@@ -60,13 +65,39 @@ const TransType = Object.freeze({
   SALES : "Sales",
   ORDER : "Order",
   LEDGER : "Ledger",
-  ACCOUNTS_PAYABLE : "Accounts Payable",
-  ACCOUNTS_RECEIVABLE : "Accounts Receivable",
+  ACCOUNTS_PAYABLE : 'Accounts Payable',
+  ACCOUNTS_RECEIVABLE : 'Accounts Receivable',
   MICROSAVINGS : "Microsavings",
-  LOANS_PROCEED : "Loans Proceed"
+  DRAWINGS: "Drawings",
+  LOANS_PROCEED : "Loans Proceed",
+  LOANS_PAYABLE : "Loans Payable",
+  NEW_LOANS : "New Loans",
+  OTHER_CASH_INCOME: "Other Cash Income",
+  OPERATING_EXPENSE : "Operating Expense",
+  OTHER_INCOME : "Other Income",
+  INVENTORY : "Inventory",
+  CASH_ON_HAND : "Cash on Hand",
+  NON_FINANCIAL_CHARGES : "Non-financial Charges",
+  NON_OPERATING_EXPENSE : "Non-Operating Expense"
 })
 
+
+const AssetType = Object.freeze({
+  CASH: 'Cash',
+  CASH_IN_BANK: 'Cash in Bank',
+  PETTY_CASH_FUND: 'Petty Cash Fund',
+  ACCOUNTS_RECEIVABLE: 'Accounts Receivable',
+  ADVANCES: 'Advances',
+  INVENTORY : 'Inventory',
+  MEMBER_FUND: "Member's Fund",
+  FIXED_ASSET: "Fixed Assets",
+  ACCUMULATED_DEPRECIATION : "Accumulated Depreciation",
+  OTHER_ASSETS : "Other Assets"
+})
+
+
 export {
+  AssetType,
   CustomerType,
   TransactionType,
   MerchantType,
@@ -76,5 +107,6 @@ export {
   PITMASTER_CUSTOMER_STATUS,
   TRANSACTION_FEE_TYPE,
   FlowType,
-  TransType
+  TransType,
+  Config
 }

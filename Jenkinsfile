@@ -12,7 +12,7 @@ pipeline {
         }
         stage("Move File") {
             steps {
-                sh "cp -rf ${WORKSPACE}/* /opt/bayanedge/bayanedge-backoffice-backend"
+                sh "cp -rf ${WORKSPACE}/* /opt/bayanedge/training/bayanedge-backoffice-backend"
             }
         }
     }

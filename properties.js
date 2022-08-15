@@ -2,13 +2,19 @@ const dotenv = require('dotenv')
 dotenv.config()
 
 module.exports = {
-  // db_dbUrl:
-  //   process.env.DB_HOST ||
-  //   "bentestmongodb:pM8wzioeWseuCo0EZI3KIaX5BmihfZuExnfNHxN5H9C4sHIznpIisfOOlxTdQDoIKZCQKyujhJciKpIxt0M7ug==@bentestmongodb.mongo.cosmos.azure.com:10255/eVoucher_db?ssl=true",
-  db_dbUrl: (process.env.DB_HOST || 'localhost:27017/bayan_edge_db'),
+  butler_db_dbUrl: (process.env.DB_HOST || '114.198.129.250:27017/bayan_edge_db'),
+  butler_db_string: "mongodb://moneyflowAdmin:*m0n3y_flow001!DB@114.198.129.250:27017/bayan_edge_db_training?readPreference=primary&directConnection=true&ssl=false",
   publicPath: '../client/build',
   port: process.env.NODE_PORT || 3001,
   tokenSecret: 'B@y@an3Dge!!M()n3yFl()w',
-  api: process.env.NODE_API != null ? process.env.NODE_API : '/api'
+  api: process.env.NODE_API != null ? process.env.NODE_API : '/api',
+  transporter: {
+    host: 'smtp.gmail.com',
+    port: '587',
+    username: 'moneyflow.agents@gmail.com',
+    password: 'ozqimtpufurjpycl'
+  },
+
+  hostName: "http://114.198.129.249:4000/moneyflow/agent/"
 }
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'

@@ -1,6 +1,7 @@
 import CommonMessage from "../classes/CommonMessage"
 import ErrorManager from "../classes/ErrorManager"
 import properties from "../properties";
+import { authorize } from "../security/SecurityManager";
 import enterpriseService from "../services/enterprise.service";
 const enterpriseController = {
     init: router => {
@@ -9,10 +10,11 @@ const enterpriseController = {
         // router.get(baseUrl, enterpriseController.getAll)
 
 
-        router.post(baseUrl + '/add', enterpriseController.addEnterprise)
-        router.post(baseUrl + '/delete', enterpriseController.deleteEnterprise)
-        router.post(baseUrl + '', enterpriseController.getAll)
-        router.post(baseUrl + '/get', enterpriseController.get)
+        router.post(baseUrl + '/add',authorize(), enterpriseController.addEnterprise)
+        router.post(baseUrl + '/delete',authorize(), enterpriseController.deleteEnterprise)
+        router.post(baseUrl + '',authorize(), enterpriseController.getAll)
+        router.post(baseUrl + '/lookup',authorize(), enterpriseController.getAllLookUp)
+        router.post(baseUrl + '/get',authorize(), enterpriseController.get)
     },
     addEnterprise: async (req, res) => {
         try {
@@ -38,10 +40,19 @@ const enterpriseController = {
         }
     },
 
+    
+    getAllLookUp: async (req, res) => {
+        try {
+            res.send(new CommonMessage({ data: await enterpriseService.getAllLookUp(req.body) }))
+        }
+        catch (err) {
+            const safeErr = ErrorManager.getSafeError(err)
+            res.status(safeErr.status).json(safeErr.body)
+        }
+    },
+
     get: async (req, res) => {
         try {
-
-
             res.send(new CommonMessage({ data: await enterpriseService.get(req.body) }))
         }
         catch (err) {

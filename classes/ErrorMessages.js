@@ -55,8 +55,13 @@ const ErrorMessages = Object.freeze({
   UNKNOWN_DB: { status: 500, message: 'Unknown DB error' },
   OLD_PWD_NOT_VALID: { status: 500, message: 'Old password not valid' },
   PWD_ADMIN_NOT_VALID: { status: 500, message: 'Password admin not valid' },
-  EMAIL_IS_REQUIRED: { status: 500, message: 'Email is required' },
-  INVALID_PASSWORD: { status: 500, message: 'Invalid Password' }
+  EMAIL_IS_REQUIRED: { status: 200,code : 500, message: 'Email is required' },
+  NAME_IS_REQUIRED: { status: 200,code : 500, message: 'Name is required' },
+  INVALID_PASSWORD: { status: 500, message: 'Invalid Password' },
+  EMAIL_ALREADY_EXISTS: { status: 200,code : 500, message: 'Email already exists' },
+  
+  INVALID_CURRENT_PASSWORD: { status: 500, message: 'Invalid Current Password' },
+  CHANGE_PASSWORD_FAILED: { status: 500, message: 'Change password failed' },
 })
 
 export default ErrorMessages

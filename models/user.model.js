@@ -164,7 +164,7 @@ const customModel = {
                 from: "MoneyFlow <" + properties.transporter.username + ">",
                 to: id,
                 subject: 'Forgot password',
-                html: 'Click <a href="' + properties.hostName + '#/change_password/' + item.activationCode + '">here</a> to set password'
+                html: 'Click <a href="' + properties.hostNameBackoffice + '#/change_password/' + item.activationCode + '">here</a> to set password'
             }
             //send email
             sendEmail(mailOptions);

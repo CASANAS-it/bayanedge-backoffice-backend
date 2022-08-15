@@ -19,7 +19,8 @@ const userService = {
         const token = jsonwebtoken.sign(user, properties.tokenSecret, {
             expiresIn: 10800 // 3 hours
         })
-        return token
+        user.token = token
+        return user
     },
     forgotPassword: async (props) => {
         const { email } = props

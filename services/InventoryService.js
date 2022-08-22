@@ -9,7 +9,8 @@ const inventoryService = {
     var items = await inventoryModel.getAllByClientId(client_id)
     var total = 0;
     items.forEach(element => {
-      total += element.unit_cost * element.quantity
+      if (element.unit_cost && element.quantity)
+        total += element.unit_cost * element.quantity
     });
     return total
   },

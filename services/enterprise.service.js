@@ -1,3 +1,4 @@
+import moment from "moment"
 import Errors from "../classes/Errors"
 import ClientModel from "../models/ClientModel"
 import ClientUserModel from "../models/ClientUserModel"
@@ -5,6 +6,7 @@ import enterpriseModel from "../models/enterprise.model"
 import userModel from "../models/user.model"
 import UserModel from "../models/UserModel"
 import { getPagination, getPagingData } from "../utils/CommonUtil"
+import { subscriptionService } from "./SubscriptionService"
 
 const enterpriseService = {
     addEnterprise: async (props) => {
@@ -24,6 +26,9 @@ const enterpriseService = {
 
         // Create Client
         var client = await ClientModel.create({ name: name })
+        // Create Temporary Subscription
+        var currentDate = new moment().format("YYYY-MM-DD")
+        var subscription = await subscriptionService.create({ admin_id: props.admin_id, client_id: client.id, from: currentDate, to: currentDate })
         //create User
         var user = await UserModel.createUser({ client_id: client.id, login_id: email, is_active: true })
         // create CLient user

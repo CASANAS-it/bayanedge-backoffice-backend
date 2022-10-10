@@ -205,6 +205,7 @@ const customModel = {
         const id = generateId()
         const customer = new customModel.model({
           id: id,
+          client_id : params.client_id,
           name : params.name,
           email : params.email,
           is_active : true,

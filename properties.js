@@ -15,7 +15,7 @@ module.exports = {
     password: 'ozqimtpufurjpycl'
   },
 
-  hostName: "http://114.198.129.249:4000/moneyflow/agent/",
+  hostName: "https://moneyflow.com.ph/",
   hostNameBackoffice :  "http://114.198.129.249:4500/moneyflow/backoffice/",
 }
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'

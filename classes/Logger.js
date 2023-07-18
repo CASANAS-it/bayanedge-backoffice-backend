@@ -12,7 +12,7 @@ class Logger {
   /**
    * Constructor to logger
    */
-  constructor () {
+  constructor() {
     const errorStackFormat = winston.format((err) => {
       if (err.level === 'error') {
         return Object.assign({}, err, {
@@ -48,7 +48,7 @@ class Logger {
    * Logs via Trace
    * @param  {...any} args any args
    */
-  trace (...args) {
+  trace(...args) {
     this.logger.trace(...args)
   }
 
@@ -56,7 +56,7 @@ class Logger {
    * Logs via Trace
    * @param  {...any} args any args
    */
-  debug (...args) {
+  debug(...args) {
     this.logger.debug(...args)
   }
 
@@ -64,7 +64,7 @@ class Logger {
    * Logs via Info
    * @param  {...any} args any args
    */
-  info (...args) {
+  info(...args) {
     this.logger.info(...args)
   }
 
@@ -72,7 +72,7 @@ class Logger {
    * Logs via Warn
    * @param  {...any} args any args
    */
-  warn (...args) {
+  warn(...args) {
     this.logger.warn(...args)
   }
 
@@ -80,11 +80,11 @@ class Logger {
    * Logs via Error
    * @param  {...any} args any args
    */
-  error (...args) {
+  error(...args) {
     this.logger.error(...args)
   }
 
-  async expressMiddleware (req, res, next) {
+  async expressMiddleware(req, res, next) {
     console.log(
       new Date().toLocaleString() + chalk.green(` ${req.method} - ${req.url} - ${JSON.stringify(req.body)} `)
     )
@@ -103,24 +103,28 @@ class Logger {
     }
 
     res.end = async function (chunk) {
-      if (chunk) { chunks.push(Buffer.from(chunk)) }
-
-      const stringBody = Buffer.concat(chunks).toString('utf-8')
-      let response = ''
       try {
-        if (stringBody) { response = JSON.parse(stringBody) }
-      } catch {
-        response = stringBody
-      }
-      oldEnd.apply(res, arguments)
+        if (chunk) { chunks.push(Buffer.from(chunk)) }
 
-      await apilogModel.insertLog({
-        apiLogId: id,
-        requestData: JSON.stringify(req.body),
-        responseData: stringBody,
-        type: 'API_LOG',
-        isSuccess: response.response_code === 0 ? 'SUCCESS' : 'FAILED'
-      })
+        const stringBody = Buffer.concat(chunks).toString('utf-8')
+        let response = ''
+        try {
+          if (stringBody) { response = JSON.parse(stringBody) }
+        } catch {
+          response = stringBody
+        }
+        oldEnd.apply(res, arguments)
+
+        await apilogModel.insertLog({
+          apiLogId: id,
+          requestData: JSON.stringify(req.body),
+          responseData: stringBody,
+          type: 'API_LOG',
+          isSuccess: response.response_code === 0 ? 'SUCCESS' : 'FAILED'
+        })
+      } catch (error) {
+
+      }
     }
 
     next()

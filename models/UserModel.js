@@ -70,7 +70,7 @@ const customModel = {
 
   async getByActivationCode(id) {
     let model = await customModel.model.findOne({ activation_code: id });
-    if (model) {
+    if (model && model.password) {
       model.password = decrypt(model.password)
     }
     return model;
